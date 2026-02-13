@@ -5,7 +5,7 @@ document.getElementById('shortenBtn').addEventListener('click', async () => {
 
     // Define a URL base em uma variável
     // Ajuste esta URL para a que você estiver usando (local ou Vercel)
-    const baseUrl = 'https://devcix.tech';
+    const baseUrl = 'https://devcix.com';
     const api_url = `${baseUrl}/api/shorten`;
 
     try {
