@@ -1,7 +1,12 @@
 document.getElementById('shortenBtn').addEventListener('click', async () => {
-    const fullUrl = document.getElementById('fullUrl').value;
+    const fullUrl = document.getElementById('fullUrl').value.trim();
     const resultDiv = document.getElementById('result');
     const shortenedLink = document.getElementById('shortenedLink');
+
+    if (!fullUrl.startsWith('https://')) {
+        alert('Digite uma URL válida!');
+        return;
+    }
 
     // Define a URL base em uma variável
     // Ajuste esta URL para a que você estiver usando (local ou Vercel)

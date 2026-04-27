@@ -39,13 +39,24 @@ app.use(cors());
 // Rota para encurtar um link
 app.post('/api/shorten', async (req, res) => {
     const { fullUrl } = req.body;
+    const normalizedUrl = typeof fullUrl === 'string' ? fullUrl.trim() : '';
 
-    if (!fullUrl) {
+    if (!normalizedUrl) {
         return res.status(400).json({ error: 'URL completa é necessária.' });
     }
 
     try {
-        const newUrl = new Url({ fullUrl });
+        const parsedUrl = new URL(normalizedUrl);
+
+        if (parsedUrl.protocol !== 'https:') {
+            return res.status(400).json({ error: 'Apenas URLs que começam com https:// são permitidas.' });
+        }
+    } catch (error) {
+        return res.status(400).json({ error: 'Digite uma URL válida começando com https://.' });
+    }
+
+    try {
+        const newUrl = new Url({ fullUrl: normalizedUrl });
         await newUrl.save();
         res.json({ shortUrl: newUrl.shortUrl });
     } catch (error) {
