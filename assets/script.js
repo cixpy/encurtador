@@ -7,8 +7,8 @@ const copyBtn = document.getElementById('copyBtn');
 const formMessage = document.getElementById('formMessage');
 const copyStatus = document.getElementById('copyStatus');
 
-const baseUrl = window.location.origin === 'null' ? 'http://localhost:3000' : window.location.origin;
-const apiUrl = `${baseUrl}/api/shorten`;
+const apiUrl = window.location.protocol === 'file:' ? 'http://localhost:3000/api/shorten' : '/api/shorten';
+const linkBaseUrl = window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin;
 
 function setMessage(message, type = '') {
     formMessage.textContent = message;
@@ -81,14 +81,18 @@ form.addEventListener('submit', async (event) => {
             body: JSON.stringify({ fullUrl })
         });
 
-        const data = await response.json();
+        const contentType = response.headers.get('content-type') || '';
+        const responseBody = contentType.includes('application/json')
+            ? await response.json()
+            : { error: await response.text() };
 
         if (!response.ok) {
-            throw new Error(data.error || 'Ocorreu um erro ao encurtar a URL.');
+            const errorMessage = responseBody.error || 'Ocorreu um erro ao encurtar a URL.';
+            throw new Error(contentType.includes('application/json') ? errorMessage : 'A API respondeu com uma página HTML em vez de JSON. Verifique se o servidor está rodando e se /api/shorten está acessível.');
         }
 
-        shortenedLink.href = data.shortLink || `${baseUrl}/${data.shortUrl}`;
-        shortenedLink.textContent = data.shortLink || `${baseUrl}/${data.shortUrl}`;
+        shortenedLink.href = responseBody.shortLink || `${linkBaseUrl}/${responseBody.shortUrl}`;
+        shortenedLink.textContent = responseBody.shortLink || `${linkBaseUrl}/${responseBody.shortUrl}`;
         resultDiv.classList.remove('hidden');
         setMessage('Link encurtado com sucesso.', 'success');
         setCopyStatus('');
