@@ -7,8 +7,8 @@ const copyBtn = document.getElementById('copyBtn');
 const formMessage = document.getElementById('formMessage');
 const copyStatus = document.getElementById('copyStatus');
 
-const apiUrl = window.location.protocol === 'file:' ? 'http://localhost:3000/api/shorten' : '/api/shorten';
-const linkBaseUrl = window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin;
+const apiUrl = 'https://devcix.com/api/shorten';
+const linkBaseUrl = 'https://devcix.com';
 
 function setMessage(message, type = '') {
     formMessage.textContent = message;
