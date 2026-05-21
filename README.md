@@ -8,6 +8,8 @@ Aplicação web simples para encurtar URLs usando **Node.js**, **Express**, **Mo
 - Gera um código curto de 5 caracteres para cada link.
 - Redireciona automaticamente do link curto para a URL original.
 - Expiração automática dos links após 2 horas.
+- Validação de URL com feedback inline.
+- Botão para copiar o link encurtado.
 
 ## Tecnologias
 
@@ -66,17 +68,9 @@ npm install
 node server.js
 ```
 
-3. Abra o `index.html` no navegador ou sirva os arquivos estáticos com a sua ferramenta preferida.
+3. Abra `http://localhost:3000` no navegador.
 
-### Observação sobre o frontend
-
-O arquivo [assets/script.js](assets/script.js) usa a variável `baseUrl` para montar as chamadas da API e os links curtos. Atualmente ela está apontando para `https://devcix.com`.
-
-Se você estiver rodando localmente, ajuste esse valor para o endereço do seu ambiente, por exemplo:
-
-```js
-const baseUrl = 'http://localhost:3000';
-```
+O backend agora também serve os arquivos estáticos do frontend, então a página funciona no mesmo endereço da API sem precisar ajustar URLs manualmente.
 
 ## Rotas da API
 
@@ -96,7 +90,8 @@ Resposta de sucesso:
 
 ```json
 {
-  "shortUrl": "abc12"
+  "shortUrl": "abc12",
+  "shortLink": "http://localhost:3000/abc12"
 }
 ```
 

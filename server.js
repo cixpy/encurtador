@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const shortid = require('shortid');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 
 // Carrega as variáveis do arquivo .env
 dotenv.config();
@@ -10,6 +11,8 @@ dotenv.config();
 // Inicializa o app
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname)));
 
 // Conecta ao banco de dados
 mongoose.connect(process.env.MONGO_URI)
@@ -41,6 +44,12 @@ app.post('/api/shorten', async (req, res) => {
     const { fullUrl } = req.body;
     const normalizedUrl = typeof fullUrl === 'string' ? fullUrl.trim() : '';
 
+    const getBaseUrl = (request) => {
+        const forwardedProto = request.headers['x-forwarded-proto'];
+        const protocol = Array.isArray(forwardedProto) ? forwardedProto[0] : forwardedProto || request.protocol;
+        return `${protocol}://${request.get('host')}`;
+    };
+
     if (!normalizedUrl) {
         return res.status(400).json({ error: 'URL completa é necessária.' });
     }
@@ -58,7 +67,10 @@ app.post('/api/shorten', async (req, res) => {
     try {
         const newUrl = new Url({ fullUrl: normalizedUrl });
         await newUrl.save();
-        res.json({ shortUrl: newUrl.shortUrl });
+        res.json({
+            shortUrl: newUrl.shortUrl,
+            shortLink: `${getBaseUrl(req)}/${newUrl.shortUrl}`
+        });
     } catch (error) {
         res.status(500).json({ error: 'Erro ao encurtar o link.' });
     }

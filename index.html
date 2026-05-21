@@ -9,16 +9,35 @@
 </head>
 
 <body>
+    <main class="shell">
+        <section class="hero">
+            <span class="eyebrow">Encurtador de links</span>
+            <h1>Transforme URLs longas em links limpos e prontos para compartilhar.</h1>
+            <!-- <p>Validação mais clara, resultado instantâneo e botão para copiar o link final em um clique.</p> -->
+        </section>
 
-    <div class="container">
-        <h1>Encurte seu Link</h1>
-        <input type="url" id="fullUrl" placeholder="Cole seu link aqui..." required>
-        <button id="shortenBtn">Encurtar</button>
-        <div id="result" class="hidden">
-            <p>Seu link encurtado:</p>
-            <a href="#" id="shortenedLink" target="_blank"></a>
-        </div>
-    </div>
+        <section class="card">
+            <form id="shortenForm" class="shorten-form" novalidate>
+                <label for="fullUrl">Cole o link completo</label>
+                <input type="url" id="fullUrl" placeholder="https://exemplo.com/pagina" autocomplete="url" required>
+                <p class="help-text">Apenas links com <strong>https://</strong> são aceitos.</p>
+                <button id="shortenBtn" type="submit">Encurtar link</button>
+            </form>
+
+            <p id="formMessage" class="form-message" aria-live="polite"></p>
+
+            <div id="result" class="result hidden" aria-live="polite">
+                <div class="result-copy">
+                    <div>
+                        <span class="result-label">Seu link encurtado</span>
+                        <a href="#" id="shortenedLink" target="_blank" rel="noreferrer noopener"></a>
+                    </div>
+                    <button id="copyBtn" type="button" class="secondary-btn">Copiar link</button>
+                </div>
+                <p id="copyStatus" class="copy-status"></p>
+            </div>
+        </section>
+    </main>
 
     <script src="./assets/script.js"></script>
 </body>
