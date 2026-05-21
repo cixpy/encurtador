@@ -19,8 +19,13 @@
         <section class="card">
             <form id="shortenForm" class="shorten-form" novalidate>
                 <label for="fullUrl">Cole o link completo</label>
-                <input type="url" id="fullUrl" placeholder="https://exemplo.com/pagina" autocomplete="url" required>
-                <p class="help-text">Apenas links com <strong>https://</strong> são aceitos.</p>
+                <div class="url-field">
+                    <span class="url-prefix">https://</span>
+                    <input type="text" id="fullUrl" placeholder="exemplo.com/pagina" autocomplete="url" inputmode="url"
+                        required>
+                </div>
+                <p class="help-text">O prefixo <strong>https://</strong> já vem fixo e qualquer repetição colada é
+                    removida automaticamente.</p>
                 <button id="shortenBtn" type="submit">Encurtar link</button>
             </form>
 

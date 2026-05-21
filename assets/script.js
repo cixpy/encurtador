@@ -22,20 +22,28 @@ function setCopyStatus(message, type = '') {
 
 function validateUrl(value) {
     if (!value) {
-        return 'Digite uma URL para encurtar.';
+        return 'Digite o destino do link para encurtar.';
     }
 
     try {
-        const parsedUrl = new URL(value);
+        const parsedUrl = new URL(`https://${value}`);
 
         if (parsedUrl.protocol !== 'https:') {
-            return 'Use um link que comece com https://.';
+            return 'Use um destino válido para o link.';
         }
 
         return '';
     } catch {
-        return 'Digite uma URL válida, por exemplo https://exemplo.com.';
+        return 'Digite um destino válido, por exemplo exemplo.com/pagina.';
     }
+}
+
+function normalizeUrlInput(value) {
+    return value
+        .trim()
+        .replace(/^https?:\/\//i, '')
+        .replace(/^\/\//, '')
+        .replace(/^\s+|\s+$/g, '');
 }
 
 async function copyShortLink() {
@@ -56,8 +64,9 @@ async function copyShortLink() {
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const fullUrl = fullUrlInput.value.trim();
-    const validationMessage = validateUrl(fullUrl);
+    const normalizedValue = normalizeUrlInput(fullUrlInput.value);
+    const fullUrl = `https://${normalizedValue}`;
+    const validationMessage = validateUrl(normalizedValue);
 
     setCopyStatus('');
 
